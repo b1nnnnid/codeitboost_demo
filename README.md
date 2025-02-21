@@ -1,51 +1,32 @@
-### 1. **app.js**
+project/
+│
+├── models/ # 데이터베이스 스키마 정의
+│   ├── groupModel.js # 그룹 관련 데이터 모델
+│   ├── postModel.js # 게시글(추억) 관련 데이터 모델
+│   ├── commentModel.js # 댓글 관련 데이터 모델
+│
+├── controllers/ # API 로직 구현
+│   ├── groupController.js # 그룹 관련 API 로직
+│   ├── postController.js # 게시글(추억) 관련 API 로직
+│   ├── commentController.js # 댓글 관련 API 로직
+│
+├── routes/ # 라우터 설정
+│   ├── groupRoute.js # 그룹 관련 라우터
+│   ├── postRoute.js # 게시글(추억) 관련 라우터
+│   ├── commentRoute.js # 댓글 관련 라우터
+│   ├── badgeRoute.js # 배지 관련 라우터
+│
+├── .env # 환경 변수 설정 파일
+├── app.js # Express 서버 설정 및 라우터 연결
+├── package.json # 프로젝트 설정 및 종속성 관리 파일
+├── README.md # 프로젝트 설명 파일
 
-- **역할**: Express 서버의 메인 파일, 서버의 초기 설정, 데이터베이스 연결, 라우터 연결 등을 처리
-- **주요 기능**:
-    - `dotenv`를 사용하여 환경 변수를 로드, MongoDB 데이터베이스에 연결
-    - `CORS`를 설정하여 다른 도메인에서의 요청을 허용
-    - `/api/groups`, `/api/comments`, `/api/posts`, `/api/badges` 경로에 대해 각각의 라우터를 연결
-    - 서버는 `PORT` 환경 변수에서 지정된 포트에서 실행. 기본적으로 3000번 포트를 사용
++------------------+     +----------------------+
+| Web/Mobile App  | <--> | Express.js Server   |
++------------------+     +----------------------+
+                               |
+                               |
+                       +----------------+
+                       |    MongoDB     |
+                       +----------------+
 
-### 2. **models/**
-
-- **역할**: MongoDB 데이터베이스의 스키마를 정의, Mongoose 모델을 생성하는 폴더
-    - **groupModel.js**: 그룹(Group) 관련 데이터를 관리하는 Mongoose 스키마와 모델을 정의. 그룹 이름, 비밀번호, 이미지 URL, 공개 여부, 그룹 소개 등 그룹의 주요 정보를 관리.
-    - **postModel.js**: 게시글(Post) 관련 데이터를 관리하는 Mongoose 스키마와 모델을 정의. 게시글 제목, 내용, 이미지, 태그, 위치, 공감 수, 댓글 수 등 게시글의 주요 정보를 관리.
-    - **commentModel.js**: 댓글(Comment) 관련 데이터를 관리하는 Mongoose 스키마와 모델을 정의. 댓글 작성자 닉네임, 내용, 비밀번호, 생성일 등을 관리.
-
-### 3. **controllers/**
-
-- **역할**: 각 API 요청을 처리하는 비즈니스 로직을 구현하는 폴더. 클라이언트의 요청을 받아서 필요한 작업을 수행하고, 결과를 반환.
-    - **groupController.js**: 그룹 생성, 수정, 삭제, 조회 등 그룹 관련 기능을 처리하는 API 로직을 포함. 비밀번호 확인, 공감하기, 배지 조회 등의 로직도 포함.
-    - **postController.js**: 게시글(추억) 생성, 수정, 삭제, 조회 등 게시글 관련 기능을 처리하는 API 로직을 포함.
-    - **commentController.js**: 댓글 생성, 수정, 삭제, 조회 등 댓글 관련 기능을 처리하는 API 로직을 포함.
-
-### 4. **routes/**
-
-- **역할**: Express 라우터를 정의하고, 각 컨트롤러와 연결하는 폴더. 클라이언트의 요청 경로와 HTTP 메서드를 기반으로 적절한 컨트롤러로 요청을 전달.
-    - **groupRoute.js**: 그룹 관련 API 요청을 처리하는 라우터. `/api/groups` 경로 아래에서 그룹 생성, 수정, 삭제, 조회 등의 작업을 처리.
-    - **postRoute.js**: 게시글(추억) 관련 API 요청을 처리하는 라우터. `/api/groups/{groupId}/posts` 경로 아래에서 게시글 생성, 수정, 삭제, 조회 등의 작업을 처리.
-    - **commentRoute.js**: 댓글 관련 API 요청을 처리하는 라우터. `/api/comments` 경로 아래에서 댓글 생성, 수정, 삭제, 조회 등의 작업을 처리.
-    - **badgeRoute.js**: 그룹이 획득한 배지 정보를 조회하는 API 요청을 처리하는 라우터.
-
----
-
-### 실행 및 흐름 설명
-
-1. **서버 실행**:
-    - `app.js` 파일을 실행하면 Express 서버가 시작. 환경 변수 파일(.env)에서 설정된 MongoDB 데이터베이스에 연결.
-    - CORS 설정이 적용되어, 지정된 도메인에서만 서버에 접근.
-2. **그룹 관리**:
-    - 클라이언트는 `/api/groups` 경로로 HTTP 요청을 보내 그룹을 생성, 수정, 삭제.
-    - 각 요청은 `groupController.js` 파일에서 정의된 비즈니스 로직에 따라 처리.
-    - 그룹 목록 조회, 특정 그룹 상세 정보 조회, 그룹 공감하기 등 다양한 기능을 사용.
-3. **게시글(추억) 관리**:
-    - 클라이언트는 `/api/groups/{groupId}/posts` 경로로 HTTP 요청을 보내 특정 그룹에 게시글을 생성, 수정, 삭제.
-    - 각 요청은 `postController.js` 파일에서 처리되며, 게시글 목록 조회, 상세 조회, 공감하기 등의 기능을 제공.
-4. **댓글 관리**:
-    - 클라이언트는 `/api/comments` 경로로 HTTP 요청을 보내 댓글을 생성, 수정, 삭제.
-    - 각 요청은 `commentController.js` 파일에서 처리.
-5. **배지 관리**:
-    - 클라이언트는 `/api/groups/{groupId}/badges` 경로로 HTTP 요청을 보내 특정 그룹이 획득한 배지를 조회.
-    - 이 요청은 `badgeRoute.js`에서 정의된 라우터를 통해 처리, `groupController.js`의 `getGroupBadges` 함수가 호출.
