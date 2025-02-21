@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memories</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .memory { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
+        .memory img { max-width: 100px; }
+        .memory h2 { margin: 0; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+    <h1>Memories</h1>
+    <div id="memories"></div>
+
+    <script>
+        async function fetchMemories() {
+            const response = await fetch('/memories');
+            const memories = await response.json();
+            const memoriesDiv = document.getElementById('memories');
+
+            memories.forEach(memory => {
+                const memoryDiv = document.createElement('div');
+                memoryDiv.classList.add('memory');
+                memoryDiv.innerHTML = `
+                    <h2>${memory.title}</h2>
+                    <p><strong>By:</strong> ${memory.nickname}</p>
+                    <img src="${memory.image}" alt="${memory.title}">
+                    <p>${memory.content}</p>
+                    <p><strong>Tags:</strong> ${memory.tags.join(', ')}</p>
+                    <p><strong>Location:</strong> ${memory.location}</p>
+                    <p><strong>Moment:</strong> ${memory.moment}</p>
+                    <p><strong>Likes:</strong> ${memory.likes}</p>
+                `;
+                memoriesDiv.appendChild(memoryDiv);
+            });
+        }
+
+        fetchMemories();
+    </script>
+</body>
+</html>

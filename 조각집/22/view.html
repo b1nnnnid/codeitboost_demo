@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 상세 보기</title>
+    <link rel="stylesheet" href="css/css.css">
+</head>
+<body>
+    <div class="board_wrap">
+        <div class="board_title">
+            <strong>게시글 상세 보기</strong>
+            <p>게시글 내용을 확인하세요.</p>
+        </div>
+        <div class="board_view_wrap">
+            <div class="board_view">
+                <div class="title" id="postTitle">글의 제목이 들어갑니다.</div>
+                <div class="info">
+                    <dl>
+                        <dt>번호</dt>
+                        <dd id="postId">1</dd>
+                    </dl>
+                    <dl>
+                        <dt>작성자</dt>
+                        <dd id="postAuthor">유수빈</dd>
+                    </dl>
+                    <dl>
+                        <dt>작성일</dt>
+                        <dd id="postDate">2033.8.21</dd>
+                    </dl>
+                    <dl>
+                        <dt>조회</dt>
+                        <dd id="postViews">39</dd>
+                    </dl>
+                </div>
+                <div class="cont" id="postContent">
+                    글의 내용이 들어갑니다.<br>
+                    글의 내용이 들어갑니다.<br>
+                    글의 내용이 들어갑니다.
+                </div>
+            </div>
+            <div class="bt_wrap">
+                <a href="list.html" class="on">목록</a>
+                <a href="#" id="editLink">수정</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = parseInt(urlParams.get('id'), 10);
+            const posts = JSON.parse(localStorage.getItem('posts')) || [];
+            const post = posts.find(p => p.id === postId);
+
+            if (post) {
+                document.getElementById('postTitle').innerText = post.title;
+                document.getElementById('postId').innerText = post.id;
+                document.getElementById('postAuthor').innerText = post.author;
+                document.getElementById('postDate').innerText = post.date;
+                document.getElementById('postViews').innerText = post.views;
+                document.getElementById('postContent').innerText = post.content;
+
+                // 조회수 증가
+                post.views += 1;
+                localStorage.setItem('posts', JSON.stringify(posts));
+
+                document.getElementById('editLink').href = `edit.html?id=${post.id}`;
+            } else {
+                alert("게시글을 찾을 수 없습니다.");
+                window.location.href = 'list.html';
+            }
+        });
+    </script>
+</body>
+</html>
